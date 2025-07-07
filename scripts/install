@@ -46,6 +46,15 @@ touch /var/log/$app/$app-frontend.log
 chown -R $app:$app /var/log/$app/
 
 #=================================================
+# PREPARE A POSTGRESQL DATABASE
+#=================================================
+ynh_script_progression "Configuring the PostgreSQL database..."
+
+ynh_psql_db_shell <<< "ALTER USER $db_user WITH SUPERUSER;"
+ynh_psql_db_shell <<< "CREATE EXTENSION IF NOT EXISTS postgis;"
+ynh_psql_db_shell <<< "ALTER USER $db_user WITH NOSUPERUSER;"
+
+#=================================================
 # BUILD APP
 #=================================================
 ynh_script_progression "Building $app's backend..."
@@ -62,7 +71,7 @@ pushd "$install_dir"/
 popd
 
 # Create necessary directories
-mkdir -p /"$data_dir"/static /"$data_dir"/media
+mkdir -p "$data_dir"/media
 
 ynh_script_progression "Building $app's frontend..."
 
