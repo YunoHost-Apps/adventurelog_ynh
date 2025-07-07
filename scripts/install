@@ -91,6 +91,8 @@ pushd "$install_dir/frontend"
     ynh_hide_warnings ynh_exec_as_app pnpm store prune
 popd
 
+chown -R "$app":www-data "$install_dir"/
+
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
