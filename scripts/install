@@ -52,7 +52,7 @@ pushd "$install_dir"/backend
 popd
 
 # Create necessary directories
-RUN mkdir -p /"$data_dir"/static /"$data_dir"/media
+mkdir -p /"$data_dir"/static /"$data_dir"/media
 
 ynh_script_progression "Building $app's frontend..."
 
