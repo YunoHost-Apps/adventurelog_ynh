@@ -11,7 +11,7 @@ version = "0.10.0~ynh1"
 maintainers = ["Thovi98"]
 
 [upstream]
-license = "GPL-v3"
+license = "GPL-3.0"
 website = "https://adventurelog.app/"
 demo = "https://demo.adventurelog.app/dashboard"
 userdoc = "https://adventurelog.app/docs/usage/usage.html"
