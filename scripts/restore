@@ -54,8 +54,8 @@ ynh_restore "/etc/systemd/system/$app-frontend.service"
 systemctl enable "$app-backend.service" --quiet
 systemctl enable "$app-frontend.service" --quiet
 
-yunohost service add "${app}-backend" --description="Wanderer backend service" --log="/var/log/$app/$app-backend.log"
-yunohost service add "${app}-frontend" --description="Wanderer frontend service" --log="/var/log/$app/$app-frontend.log"
+yunohost service add "${app}-backend" --description="AdventureLog backend service" --log="/var/log/$app/$app-backend.log"
+yunohost service add "${app}-frontend" --description="AdventureLog frontend service" --log="/var/log/$app/$app-frontend.log"
 
 ynh_restore "/etc/logrotate.d/$app"
 

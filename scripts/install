@@ -77,10 +77,10 @@ ynh_script_progression "Adding system configurations related to $app..."
 ynh_config_add_nginx
 
 ynh_config_add_systemd --service="${app}-backend" --template="adventurelog-backend.service"
-ynh_config_add_systemd --service="${app}-web" --template="adventurelog-frontend.service"
+ynh_config_add_systemd --service="${app}-frontend" --template="adventurelog-frontend.service"
 
-yunohost service add "${app}-backend" --description="Wanderer backend service" --log="/var/log/$app/$app-backend.log"
-yunohost service add "${app}-frontend" --description="Wanderer frontend service" --log="/var/log/$app/$app-frontend.log"
+yunohost service add "${app}-backend" --description="AdventureLog backend service" --log="/var/log/$app/$app-backend.log"
+yunohost service add "${app}-frontend" --description="AdventureLog frontend service" --log="/var/log/$app/$app-frontend.log"
 
 
 ynh_config_add_logrotate
