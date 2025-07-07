@@ -7,10 +7,10 @@ After=postgresql.service
 Type=simple
 User=__APP__
 Group=__APP__
-WorkingDirectory=__INSTALL_DIR__/
+WorkingDirectory=__INSTALL_DIR__/frontend
 EnvironmentFile=__INSTALL_DIR__/.env
 Environment="PATH=__PATH_WITH_NODEJS__"
-ExecStart=__NODEJS_DIR__/node build
+ExecStart=__NODEJS_DIR__/node build/index.js
 StandardOutput=append:/var/log/__APP__/__APP__-frontend.log
 StandardError=inherit
 Restart=on-failure
