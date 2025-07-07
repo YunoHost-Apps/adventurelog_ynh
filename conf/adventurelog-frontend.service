@@ -1,15 +1,20 @@
 [Unit]
-Description=Small description of the service
+Description=__APP__ frontend service
 After=network.target
+After=postgresql.service
 
 [Service]
 Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/
-ExecStart=__INSTALL_DIR__/script
+EnvironmentFile=__INSTALL_DIR__/.env
+Environment="PATH=__PATH_WITH_NODEJS__"
+ExecStart=__NODEJS_DIR__/node build
 StandardOutput=append:/var/log/__APP__/__APP__.log
 StandardError=inherit
+Restart=on-failure
+RestartSec=5s
 
 ### Depending on specificities of your service/app, you may need to tweak these
 ### .. but this should be a good baseline
