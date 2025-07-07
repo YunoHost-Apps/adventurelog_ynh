@@ -80,7 +80,7 @@ ram.runtime = "50M"
     frontend.default = 8016
 
     [resources.apt]
-    packages = "postgresql, postgresql-contrib, python3, python3-venv"
+    packages = "postgresql, postgresql-contrib, python3, python3-venv, gdal-bin, libgdal-dev"
 
     [resources.database]
     type = "postgresql"
