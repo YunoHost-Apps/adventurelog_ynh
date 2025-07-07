@@ -67,9 +67,6 @@ pushd "$install_dir/frontend"
     #remove unneeded files
     ynh_hide_warnings ynh_exec_as_app pnpm prune --prod --ignore-scripts
     ynh_hide_warnings ynh_exec_as_app pnpm store prune
-    ynh_safe_rm src
-    ynh_safe_rm server
-    ynh_safe_rm .next/cache
 popd
 
 #=================================================
@@ -79,9 +76,12 @@ ynh_script_progression "Adding system configurations related to $app..."
 
 ynh_config_add_nginx
 
-ynh_config_add_systemd
+ynh_config_add_systemd --service="${app}-backend" --template="adventurelog-backend.service"
+ynh_config_add_systemd --service="${app}-web" --template="adventurelog-frontend.service"
 
-yunohost service add "$app" --description="Travel companion for the modern-day explorer" --log="/var/log/$app/$app.log"
+yunohost service add "${app}-backend" --description="Wanderer backend service" --log="/var/log/$app/$app-backend.log"
+yunohost service add "${app}-frontend" --description="Wanderer frontend service" --log="/var/log/$app/$app-frontend.log"
+
 
 ynh_config_add_logrotate
 
@@ -92,7 +92,8 @@ ynh_config_add_logrotate
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="start"
+ynh_systemctl --service="${app}-backend" --action="start"
+ynh_systemctl --service="${app}-frontend" --action="start"
 
 #=================================================
 # END OF SCRIPT

@@ -99,20 +99,23 @@ ynh_config_add_phpfpm
 
 ynh_config_add_nginx
 
-ynh_config_add_systemd
+ynh_config_add_systemd --service="${app}-backend" --template="adventurelog-backend.service"
+ynh_config_add_systemd --service="${app}-web" --template="adventurelog-frontend.service"
 
-yunohost service add "$app" --description="A short description of the app" --log="/var/log/$app/$app.log"
+yunohost service add "${app}-backend" --description="Wanderer backend service" --log="/var/log/$app/$app-backend.log"
+yunohost service add "${app}-frontend" --description="Wanderer frontend service" --log="/var/log/$app/$app-frontend.log"
 
 ynh_config_add_logrotate
 
-ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-error.log" --failregex="Regex to match into the log for a failed login"
+# ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-error.log" --failregex="Regex to match into the log for a failed login"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="start"
+ynh_systemctl --service="${app}-backend" --action="start"
+ynh_systemctl --service="${app}-frontend" --action="start"
 
 #=================================================
 # END OF SCRIPT
