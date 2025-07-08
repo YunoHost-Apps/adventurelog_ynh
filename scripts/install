@@ -74,7 +74,6 @@ pushd "$install_dir"/
     ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/pip" install -r "$install_dir"/backend/server/requirements.txt
     ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py collectstatic --noinput --verbosity 2
     ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py migrate
-    #ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py download-countries
     
     ynh_safe_rm "$install_dir/.cache/pip"
 popd
@@ -101,11 +100,12 @@ chown -R "$app":www-data "$install_dir"/
 #=================================================
 ynh_script_progression "Creating admin user..."
 
-ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py manage.py shell << EOF
-from django.contrib.auth import get_user_model
-from allauth.account.models import EmailAddress
+pushd "$install_dir"/
+    ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py manage.py shell << EOF
+    from django.contrib.auth import get_user_model
+    from allauth.account.models import EmailAddress
 
-User = get_user_model()
+    User = get_user_model() 
 
     superuser = User.objects.create_superuser(
         username='$admin',
@@ -121,6 +121,7 @@ User = get_user_model()
         primary=True
     )
 EOF
+popd
 
 #=================================================
 # SYSTEM CONFIGURATION
