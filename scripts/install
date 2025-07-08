@@ -11,6 +11,9 @@ source /usr/share/yunohost/helpers
 # INITIALIZE AND STORE SETTINGS
 #=================================================
 
+admin=$(ynh_user_get_info --username=$admin --key=username)
+admin_mail=$(ynh_user_get_info --username=$admin --key=mail)
+
 key=$(ynh_string_random --length=45 | base64)
 ynh_app_setting_set --key=key --value=$key
 
@@ -105,15 +108,15 @@ from allauth.account.models import EmailAddress
 User = get_user_model()
 
     superuser = User.objects.create_superuser(
-        username='$django_admin_username',
-        email='$django_admin_email',
-        password='$django_admin_password'
+        username='$admin',
+        email='$admin_mail',
+        password='$password'
     )
 
     # Create the EmailAddress object for AllAuth
     EmailAddress.objects.create(
         user=superuser,
-        email='$django_admin_email',
+        email='$admin_mail',
         verified=True,
         primary=True
     )
