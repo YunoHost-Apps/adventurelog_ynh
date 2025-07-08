@@ -8,6 +8,13 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
+# LOAD SETTINGS
+#=================================================
+
+admin=$(ynh_user_get_info --username=$admin --key=username)
+admin_mail=$(ynh_user_get_info --username=$admin --key=mail)
+
+#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Stopping $app's systemd services..."
@@ -99,6 +106,7 @@ yunohost service add "${app}-backend" --description="AdventureLog backend servic
 yunohost service add "${app}-frontend" --description="AdventureLog frontend service" --log="/var/log/$app/$app-frontend.log"
 
 ynh_config_add_logrotate
+chown -R $app:$app /var/log/$app/
 
 # ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-error.log" --failregex="Regex to match into the log for a failed login"
 
