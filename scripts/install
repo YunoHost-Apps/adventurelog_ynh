@@ -94,6 +94,32 @@ popd
 chown -R "$app":www-data "$install_dir"/
 
 #=================================================
+# CREATE SUPERUSER
+#=================================================
+ynh_script_progression "Creating admin user..."
+
+ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py manage.py shell << EOF
+from django.contrib.auth import get_user_model
+from allauth.account.models import EmailAddress
+
+User = get_user_model()
+
+    superuser = User.objects.create_superuser(
+        username='$django_admin_username',
+        email='$django_admin_email',
+        password='$django_admin_password'
+    )
+
+    # Create the EmailAddress object for AllAuth
+    EmailAddress.objects.create(
+        user=superuser,
+        email='$django_admin_email',
+        verified=True,
+        primary=True
+    )
+EOF
+
+#=================================================
 # SYSTEM CONFIGURATION
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."
