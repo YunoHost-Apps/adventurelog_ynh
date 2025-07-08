@@ -1,1 +1,1 @@
-This is a dummy description of this app features
+Discover new places, track your adventures, and share your experiences with friends and family.
