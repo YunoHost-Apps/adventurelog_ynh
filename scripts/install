@@ -11,6 +11,9 @@ source /usr/share/yunohost/helpers
 # INITIALIZE AND STORE SETTINGS
 #=================================================
 
+admin=$(ynh_user_get_info --username=$admin --key=username)
+admin_mail=$(ynh_user_get_info --username=$admin --key=mail)
+
 key=$(ynh_string_random --length=45 | base64)
 ynh_app_setting_set --key=key --value=$key
 
@@ -31,6 +34,8 @@ ynh_script_progression "Setting up source files..."
 
 ynh_setup_source --dest_dir="$install_dir"
 
+chown -R "$app:www-data" "$install_dir"
+
 #=================================================
 # APP INITIAL CONFIGURATION
 #=================================================
@@ -38,23 +43,40 @@ ynh_script_progression "Adding $app's configuration files..."
 
 ynh_config_add --template=".env" --destination="$install_dir/.env"
 
+ynh_config_add_logrotate
+
+touch /var/log/$app/$app-backend.log
+touch /var/log/$app/$app-frontend.log
+
+chown -R $app:$app /var/log/$app/
+
+#=================================================
+# PREPARE A POSTGRESQL DATABASE
+#=================================================
+ynh_script_progression "Configuring the PostgreSQL database..."
+
+#Create postgis extension
+ynh_psql_db_shell <<< "ALTER USER $db_user WITH SUPERUSER;"
+ynh_psql_db_shell <<< "CREATE EXTENSION IF NOT EXISTS postgis;"
+ynh_psql_db_shell <<< "ALTER USER $db_user WITH NOSUPERUSER;"
+
 #=================================================
 # BUILD APP
 #=================================================
 ynh_script_progression "Building $app's backend..."
 
-pushd "$install_dir"/backend
-    cp "$install_dir"/backend/server/requirements.txt "$install_dir"/backend
+# Create necessary directories
+mkdir -p "$data_dir"/media
 
+pushd "$install_dir"/
     ynh_exec_as_app python3 -m venv "$install_dir/venv"
     ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/pip" install --upgrade pip
-    ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/pip" install -r requirements.txt
-
+    ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/pip" install -r "$install_dir"/backend/server/requirements.txt
+    ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py collectstatic --noinput --verbosity 2
+    ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py migrate
+    
     ynh_safe_rm "$install_dir/.cache/pip"
 popd
-
-# Create necessary directories
-RUN mkdir -p /"$datadir"/static /"$datadir"/media
 
 ynh_script_progression "Building $app's frontend..."
 
@@ -69,9 +91,36 @@ pushd "$install_dir/frontend"
     #remove unneeded files
     ynh_hide_warnings ynh_exec_as_app pnpm prune --prod --ignore-scripts
     ynh_hide_warnings ynh_exec_as_app pnpm store prune
-    ynh_safe_rm src
-    ynh_safe_rm server
-    ynh_safe_rm .next/cache
+popd
+
+chown -R "$app":www-data "$install_dir"/
+
+#=================================================
+# CREATE SUPERUSER
+#=================================================
+ynh_script_progression "Creating admin user..."
+
+pushd "$install_dir"/
+ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py shell << EOF
+from django.contrib.auth import get_user_model
+from allauth.account.models import EmailAddress
+
+User = get_user_model() 
+
+superuser = User.objects.create_superuser(
+    username='$admin',
+    email='$admin_mail',
+    password='$password'
+)
+
+# Create the EmailAddress object for AllAuth
+EmailAddress.objects.create(
+    user=superuser,
+    email='$admin_mail',
+    verified=True,
+    primary=True
+)
+EOF
 popd
 
 #=================================================
@@ -81,20 +130,21 @@ ynh_script_progression "Adding system configurations related to $app..."
 
 ynh_config_add_nginx
 
-ynh_config_add_systemd
+ynh_config_add_systemd --service="${app}-backend" --template="adventurelog-backend.service"
+ynh_config_add_systemd --service="${app}-frontend" --template="adventurelog-frontend.service"
 
-yunohost service add "$app" --description="Travel companion for the modern-day explorer" --log="/var/log/$app/$app.log"
-
-ynh_config_add_logrotate
+yunohost service add "${app}-backend" --description="AdventureLog backend service" --log="/var/log/$app/$app-backend.log"
+yunohost service add "${app}-frontend" --description="AdventureLog frontend service" --log="/var/log/$app/$app-frontend.log"
 
 # ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-error.log" --failregex="Regex to match into the log for a failed login"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression "Starting $app's systemd service..."
+ynh_script_progression "Starting $app's systemd services..."
 
-ynh_systemctl --service="$app" --action="start"
+ynh_systemctl --service="${app}-backend" --action="start"
+ynh_systemctl --service="${app}-frontend" --action="start"
 
 #=================================================
 # END OF SCRIPT
