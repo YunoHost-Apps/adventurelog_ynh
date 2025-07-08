@@ -108,17 +108,17 @@ from allauth.account.models import EmailAddress
 User = get_user_model() 
 
 superuser = User.objects.create_superuser(
-username='$admin',
-email='$admin_mail',
-password='$password'
+    username='$admin',
+    email='$admin_mail',
+    password='$password'
 )
 
 # Create the EmailAddress object for AllAuth
 EmailAddress.objects.create(
-user=superuser,
-email='$admin_mail',
-verified=True,
-primary=True
+    user=superuser,
+    email='$admin_mail',
+    verified=True,
+    primary=True
 )
 EOF
 popd
