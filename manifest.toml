@@ -52,7 +52,7 @@ ram.runtime = "50M"
 
     [resources.sources.main]
     url = "https://github.com/seanmorley15/AdventureLog/archive/cadea118d3d4aeca27d1d32ae0f8480c6b2b209c.tar.gz"
-    sha256 = "b2d12829098c6316c2a8eaec6ca99e553a171f3b7bc94b15159df23b6a01eb65"
+    sha256 = "582b2e5ed1d4417a4ab834aacfbadc5a9f079639d70933a187443bd9342b630a"
 
     autoupdate.strategy = "latest_github_release"
 
