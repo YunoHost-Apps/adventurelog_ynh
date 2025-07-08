@@ -140,7 +140,7 @@ yunohost service add "${app}-frontend" --description="AdventureLog frontend serv
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression "Starting $app's systemd service..."
+ynh_script_progression "Starting $app's systemd services..."
 
 ynh_systemctl --service="${app}-backend" --action="start"
 ynh_systemctl --service="${app}-frontend" --action="start"
