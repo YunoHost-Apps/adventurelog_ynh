@@ -62,6 +62,9 @@ chown -R $app:$app /var/log/$app/
 
 ynh_restore "/var/log/$app/"
 
+touch /var/log/$app/$app-backend.log
+touch /var/log/$app/$app-frontend.log
+
 chown -R $app:$app /var/log/$app/
 
 #=================================================
