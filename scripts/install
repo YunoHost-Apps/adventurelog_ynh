@@ -101,25 +101,25 @@ chown -R "$app":www-data "$install_dir"/
 ynh_script_progression "Creating admin user..."
 
 pushd "$install_dir"/
-    ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py shell << EOF
-    from django.contrib.auth import get_user_model
-    from allauth.account.models import EmailAddress
+ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py shell << EOF
+from django.contrib.auth import get_user_model
+from allauth.account.models import EmailAddress
 
-    User = get_user_model() 
+User = get_user_model() 
 
-    superuser = User.objects.create_superuser(
-        username='$admin',
-        email='$admin_mail',
-        password='$password'
-    )
+superuser = User.objects.create_superuser(
+username='$admin',
+email='$admin_mail',
+password='$password'
+)
 
-    # Create the EmailAddress object for AllAuth
-    EmailAddress.objects.create(
-        user=superuser,
-        email='$admin_mail',
-        verified=True,
-        primary=True
-    )
+# Create the EmailAddress object for AllAuth
+EmailAddress.objects.create(
+user=superuser,
+email='$admin_mail',
+verified=True,
+primary=True
+)
 EOF
 popd
 
