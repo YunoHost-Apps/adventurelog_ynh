@@ -31,6 +31,8 @@ ynh_script_progression "Setting up source files..."
 
 ynh_setup_source --dest_dir="$install_dir"
 
+chown -R "$app:www-data" "$install_dir"
+
 #=================================================
 # APP INITIAL CONFIGURATION
 #=================================================
@@ -50,6 +52,7 @@ chown -R $app:$app /var/log/$app/
 #=================================================
 ynh_script_progression "Configuring the PostgreSQL database..."
 
+#Create postgis extension
 ynh_psql_db_shell <<< "ALTER USER $db_user WITH SUPERUSER;"
 ynh_psql_db_shell <<< "CREATE EXTENSION IF NOT EXISTS postgis;"
 ynh_psql_db_shell <<< "ALTER USER $db_user WITH NOSUPERUSER;"
@@ -59,8 +62,8 @@ ynh_psql_db_shell <<< "ALTER USER $db_user WITH NOSUPERUSER;"
 #=================================================
 ynh_script_progression "Building $app's backend..."
 
-mkdir -p "$install_dir"/backend/server/static
-chown -R $app:$app "$install_dir"/backend/server/static
+# Create necessary directories
+mkdir -p "$data_dir"/media
 
 pushd "$install_dir"/
     ynh_exec_as_app python3 -m venv "$install_dir/venv"
@@ -72,9 +75,6 @@ pushd "$install_dir"/
     
     ynh_safe_rm "$install_dir/.cache/pip"
 popd
-
-# Create necessary directories
-mkdir -p "$data_dir"/media
 
 ynh_script_progression "Building $app's frontend..."
 
