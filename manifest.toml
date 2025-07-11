@@ -72,9 +72,6 @@ ram.runtime = "50M"
     admin.show_tile = false
     admin.protected = true
 
-    login.url = "/login"
-    login.auth_header = false
-
     [resources.ports]
     backend.default = 8015
     frontend.default = 8016
