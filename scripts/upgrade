@@ -13,7 +13,6 @@ source /usr/share/yunohost/helpers
 
 admin=$(ynh_user_get_info --username=$admin --key=username)
 admin_mail=$(ynh_user_get_info --username=$admin --key=mail)
-ynh_app_setting_set --key=protect_against_basic_auth_spoofing --value=False
 
 #=================================================
 # STOP SYSTEMD SERVICE

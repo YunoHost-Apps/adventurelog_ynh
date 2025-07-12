@@ -20,8 +20,6 @@ ynh_app_setting_set --key=key --value=$key
 # Not saved by default
 ynh_app_setting_set --key=password --value="$password"
 
-ynh_app_setting_set --key=protect_against_basic_auth_spoofing --value=False
-
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
