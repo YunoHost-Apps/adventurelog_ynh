@@ -65,8 +65,6 @@ ynh_psql_db_shell <<< "ALTER USER $db_user WITH NOSUPERUSER;"
 #=================================================
 ynh_script_progression "Building $app's backend..."
 
-# Create necessary directories
-mkdir -p "$data_dir"/media
 mkdir -p "$install_dir"/backend/server/static
 
 pushd "$install_dir"/
