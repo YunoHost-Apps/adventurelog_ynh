@@ -126,7 +126,10 @@ popd
 ynh_script_progression "Download countries..."
 
 chown -R "$app": "$install_dir"
+
+pushd "$install_dir/"
 ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" "$install_dir/backend/server/manage.py" download-countries
+popd
 
 #=================================================
 # SYSTEM CONFIGURATION
