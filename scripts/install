@@ -123,6 +123,13 @@ EOF
 popd
 
 #=================================================
+# DOWNLOAD COUNTRIES
+#=================================================
+ynh_script_progression "Download countries..."
+
+ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" "$install_dir/backend/server/manage.py" download-countries
+
+#=================================================
 # SYSTEM CONFIGURATION
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."
