@@ -92,11 +92,13 @@ ynh_script_progression "Update countries..."
 
 
 mkdir -p "$install_dir"/backend/server/media
-chown -R $app:$app "$install_dir"/
+chown -R "$app":"$app" "$install_dir"/
 
 pushd "$install_dir/"
 ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" "$install_dir/backend/server/manage.py" download-countries
 popd
+
+chown -R "$app":www-data "$install_dir"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATION
