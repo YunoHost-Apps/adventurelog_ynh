@@ -90,6 +90,7 @@ popd
 #=================================================
 ynh_script_progression "Update countries..."
 
+
 mkdir -p "$install_dir"/backend/server/media
 chown -R $app:$app "$install_dir"/
 
