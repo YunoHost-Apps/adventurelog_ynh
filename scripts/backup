@@ -38,7 +38,7 @@ ynh_backup "/etc/logrotate.d/$app"
 # BACKUP VARIOUS FILES
 #=================================================
 
-# NB: /var/log is not backuped during safety-backup-before-upgrades, same as $data_dir
+# NB: /var/log is not backuped during safety-backup-before-upgrades
 ynh_backup "/var/log/$app/"
 
 #=================================================
