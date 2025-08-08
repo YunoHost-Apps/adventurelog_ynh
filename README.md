@@ -19,6 +19,10 @@ Travel companion for the modern-day explorer.
 <a href="https://github.com/YunoHost-Apps/adventurelog_ynh/issues"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_report_an_issue.svg"/></a>
 </div>
 
+
+## Screenshots
+![Screenshot of AdventureLog](./doc/screenshots/adventurelog.png)
+
 ## 📦 Developer info
 
 [![Automatic tests level](https://apps.yunohost.org/badge/cilevel/adventurelog)](https://ci-apps.yunohost.org/ci/apps/adventurelog/)
