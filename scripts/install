@@ -132,6 +132,13 @@ pushd "$install_dir/"
 ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" "$install_dir/backend/server/manage.py" download-countries
 popd
 
+#Remove unneeded files
+ynh_safe_rm "$install_dir"/.cache
+ynh_safe_rm "$install_dir"/.vscode
+ynh_safe_rm "$install_dir"/.github
+ynh_safe_rm "$install_dir"/.devcontainer
+ynh_safe_rm "$install_dir"/.local
+
 chown -R "$app":www-data "$install_dir"
 #=================================================
 # SYSTEM CONFIGURATION
