@@ -21,13 +21,6 @@ ynh_app_setting_set --key=key --value=$key
 ynh_app_setting_set --key=password --value="$password"
 
 #=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression "Installing dependencies..."
-
-ynh_nodejs_install
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression "Setting up source files..."
