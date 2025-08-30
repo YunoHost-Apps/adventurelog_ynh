@@ -23,13 +23,6 @@ ynh_systemctl --service="$app-backend" --action="stop"
 ynh_systemctl --service="$app-frontend" --action="stop"
 
 #=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression "Upgrading dependencies..."
-
-ynh_nodejs_install
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression "Upgrading source files..."
