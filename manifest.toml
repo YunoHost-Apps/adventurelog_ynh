@@ -6,7 +6,7 @@ id = "adventurelog"
 name = "AdventureLog"
 description.en = "Travel companion for the modern-day explorer."
 
-version = "0.11.0~ynh1"
+version = "0.11.0~ynh2"
 
 maintainers = ["Thovi98"]
 
@@ -74,7 +74,7 @@ ram.runtime = "50M"
     frontend.default = 8016
 
     [resources.apt]
-    packages = "postgresql, postgresql-contrib, python3, python3-venv, gdal-bin, libgdal-dev, postgresql-postgis, supervisor"
+    packages = "postgresql, postgresql-contrib, python3, python3-venv, gdal-bin, libgdal-dev, postgresql-postgis, supervisor, memcached"
 
     [resources.database]
     type = "postgresql"
