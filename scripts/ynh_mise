@@ -40,7 +40,7 @@ ynh_mise_install() {
 
         pushd "$MISE_DATA_DIR" || exit
         # Install the requested version of mise
-        if [[ $YNH_ARCH == "x86_64" ]]; then
+        if [[ $YNH_ARCH == "amd64" ]]; then
             wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-x64.tar.xz
             tar -xf mise-v$MISE_VERSION-linux-x64.tar.xz --strip-components 1
             rm mise-v$MISE_VERSION-linux-x64.tar.xz
