@@ -5,9 +5,9 @@
 #=================================================
 
 source _common.sh
+source /usr/share/yunohost/helpers
 source ynh_mise
 source ynh_python
-source /usr/share/yunohost/helpers
 
 #=================================================
 # REMOVE SYSTEM CONFIGURATION

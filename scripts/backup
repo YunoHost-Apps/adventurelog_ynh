@@ -5,9 +5,9 @@
 #=================================================
 
 source ../settings/scripts/_common.sh
+source /usr/share/yunohost/helpers
 source ../settings/scripts/ynh_mise
 source ../settings/scripts/ynh_python
-source /usr/share/yunohost/helpers
 
 ynh_print_info "Declaring files to be backed up..."
 
