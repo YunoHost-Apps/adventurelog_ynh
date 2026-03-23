@@ -116,7 +116,7 @@ _ynh_python_cleanup() {
     # Remove no more needed Python versions
     local installed_python_versions=$("${MISE_ASSET_DIR}/mise" ls python --json | jq -r '.[].version')
     for installed_python_version in $installed_python_versions; do
-        if [[ -n $installed_python_version ]] && [[ ! grep -qE "^python_version: '?$installed_python_version'?" /etc/yunohost/apps/*/settings.yml ]]; then
+        if [[ -n "$installed_python_version" ]] && ! grep -qE "^python_version: '?$installed_python_version'?" /etc/yunohost/apps/*/settings.yml; then
             ynh_print_info "Removing Python-$installed_python_version"
             "$MISE_ASSET_DIR/mise" unuse python@"$installed_python_version"
         fi
