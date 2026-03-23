@@ -49,6 +49,8 @@ _ynh_load_python_in_path_and_other_tweaks() {
     # This is in full lowercase such that it gets replaced in templates
     path_with_python="$PATH"
     PATH_with_python="$PATH"
+
+    $path_with_python/pip install toml pyyaml
 }
 
 # Auto-load Python path tweaks if this app uses the python resource in the manifest
