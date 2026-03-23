@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+#
+# Copyright (c) 2026 YunoHost Contributors
+#
+# This file is part of YunoHost (see https://yunohost.org)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+readonly MISE_INSTALL_DIR="/opt/mise-global"
+export MISE_INSTALL_DIR
+
+export MISE_DATA_DIR="$MISE_INSTALL_DIR/mise"
+export MISE_CACHE_DIR="$MISE_INSTALL_DIR/cache"
+export MISE_GLOBAL_CONFIG_FILE="$MISE_INSTALL_DIR/config/config.toml"
+
+export MISE_VERSION=2026.3.10
+export MISE_ASSET_DIR="$MISE_DATA_DIR/bin"
+
+MISE_ENV=production
+
+
+ynh_mise_install() {
+
+    mkdir --parents "${MISE_DATA_DIR}"
+    mkdir --parents "${MISE_DATA_DIR/config}"
+
+    if [[ ! -f "$MISE_ASSET_DIR"/mise ]] || [[ "$($MISE_ASSET_DIR/mise --version)" != "$MISE_VERSION" ]]; then
+
+        pushd "$MISE_DATA_DIR" || exit
+        # Install the requested version of mise
+        if [[ $YNH_ARCH == "x86_64" ]]; then
+            wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-x64.tar.xz
+            tar -xf mise-v$MISE_VERSION-linux-x64.tar.xz --strip-components 1
+            rm mise-v$MISE_VERSION-linux-x64.tar.xz
+        elif [[ $YNH_ARCH == "arm64" ]]; then
+            wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-arm64.tar.xz
+            tar -xf mise-v$MISE_VERSION-linux-arm64.tar.xz --strip-components 1
+            rm mise-v$MISE_VERSION-linux-arm64.tar.xz
+        elif [[ $YNH_ARCH == "armv7" ]]; then
+            wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-armv7.tar.xz
+            tar -xf mise-v$MISE_VERSION-linux-armv7.tar.xz --strip-components 1
+            rm mise-v$MISE_VERSION-linux-armv7.tar.xz
+        else
+            echo "No available mise version for this arch"
+        fi
+        popd || exit
+    fi
+}

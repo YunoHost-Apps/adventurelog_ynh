@@ -8,7 +8,9 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-
+source _common.sh
+source ynh_mise
+source ynh_ruby
 source /usr/share/yunohost/helpers
 
 #=================================================
