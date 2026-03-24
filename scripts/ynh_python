@@ -77,6 +77,7 @@ ynh_python_install() {
     pushd "$install_dir" || exit
         ynh_mise_install
         "$MISE_ASSET_DIR"/mise use python@"$python_version"
+        "$MISE_ASSET_DIR"/mise trust
     popd || exit
 
     _ynh_load_python_in_path_and_other_tweaks
