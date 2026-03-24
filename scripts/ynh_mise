@@ -55,13 +55,9 @@ ynh_mise_install() {
         fi
         popd || exit
 
-        # Set environment variables (retrievable in the $MISE_GLOBAL_CONFIG_FILE file)
-        $MISE_GLOBAL_CONFIG_FILE $MISE_DATA_DIR $MISE_CACHE_DIR "$MISE_BIN_DIR"/mise config 
-
         # Load the path of mise in $PATH
-        mise_dir="$MISE_BIN_DIR"
-        if [[ :$PATH: != *":$mise_dir"* ]]; then
-        PATH="$mise_dir:$PATH"
+        if [[ :$PATH: != *":$MISE_BIN_DIR"* ]]; then
+        PATH="$MISE_BIN_DIR:$PATH"
         fi
     fi
 }
