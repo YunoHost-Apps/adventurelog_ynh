@@ -43,7 +43,7 @@ _ynh_load_python_in_path_and_other_tweaks() {
     PATH_with_python="$PATH"
 
     # Install Python modules that has to be installed for YunoHost helpers to work
-    ynh_exec_as_app python_dir/python -m pip install --no-cache-dir toml pyyaml
+    ynh_exec_as_app $python_dir/python -m pip install --no-cache-dir toml pyyaml
 
 }
 
