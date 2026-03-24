@@ -59,5 +59,8 @@ ynh_mise_install() {
         if [[ :$PATH: != *":$MISE_BIN_DIR"* ]]; then
         PATH="$MISE_BIN_DIR:$PATH"
         fi
+        # Export PATH such that it's available through sudo -E / ynh_exec_as $app
+        export PATH
+        
     fi
 }
