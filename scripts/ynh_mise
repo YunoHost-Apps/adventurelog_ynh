@@ -18,26 +18,25 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+export MISE_VERSION=2026.3.13
+
 readonly MISE_INSTALL_DIR="/opt/mise-global"
 export MISE_INSTALL_DIR
 
-export MISE_DATA_DIR="$MISE_INSTALL_DIR/mise"
-export MISE_CACHE_DIR="$MISE_INSTALL_DIR/cache"
 export MISE_GLOBAL_CONFIG_FILE="$MISE_INSTALL_DIR/config/config.toml"
 
-export MISE_VERSION=2026.3.13
-export MISE_ASSET_DIR="$MISE_DATA_DIR/bin"
-
-export MISE_ENV=production
+export MISE_DATA_DIR="$MISE_INSTALL_DIR/binaries"
+export MISE_BIN_DIR="$MISE_INSTALL_DIR/mise/bin"
+export MISE_CACHE_DIR="$MISE_INSTALL_DIR/cache"
 
 ynh_mise_install() {
 
-    mkdir --parents "${MISE_DATA_DIR}"
-    mkdir --parents "${MISE_DATA_DIR/config}"
+    mkdir -p "${MISE_INSTALL_DIR/mise}"
+    mkdir -p "${MISE_DATA_DIR}"
 
-    if [[ ! -f "$MISE_ASSET_DIR"/mise ]] || [[ "$($MISE_ASSET_DIR/mise version --json | jq -r '.version' | awk '{print $1}')" != "$MISE_VERSION" ]]; then
+    if [[ ! -f "$MISE_BIN_DIR"/mise ]] || [[ "$($MISE_BIN_DIR/mise version --json | jq -r '.version' | awk '{print $1}')" != "$MISE_VERSION" ]]; then
 
-        pushd "$MISE_DATA_DIR" || exit
+        pushd "$MISE_INSTALL_DIR"/mise || exit
         # Install the requested version of mise
         if [[ $YNH_ARCH == "amd64" ]]; then
             ynh_hide_warnings wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-x64.tar.xz
@@ -56,10 +55,11 @@ ynh_mise_install() {
         fi
         popd || exit
 
-        "$MISE_ASSET_DIR"/mise settings shared_install_dirs="$MISE_INSTALL_DIR"/binaries
+        # Set environment variables (retrievable in the $MISE_GLOBAL_CONFIG_FILE file)
+        $MISE_GLOBAL_CONFIG_FILE $MISE_DATA_DIR $MISE_CACHE_DIR "$MISE_BIN_DIR"/mise config 
 
         # Load the path of mise in $PATH
-        mise_dir="$MISE_ASSET_DIR"
+        mise_dir="$MISE_BIN_DIR"
         if [[ :$PATH: != *":$mise_dir"* ]]; then
         PATH="$mise_dir:$PATH"
         fi
