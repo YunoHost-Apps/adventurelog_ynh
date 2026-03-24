@@ -18,13 +18,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-readonly MISE_INSTALL_DIR="/opt/mise-global"
-export MISE_INSTALL_DIR
-
-export MISE_ASSET_DIR="/opt/mise-global/mise/bin"
-
-#export CONFIG_DIR="/opt/mise-global/apps/$app"
-
 _ynh_load_python_in_path_and_other_tweaks() {
 
     # Get the absolute path of this version of Python
@@ -73,7 +66,7 @@ ynh_python_install() {
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_install"
 
     # Install the requested version of Python
-    local final_python_version=$("${MISE_ASSET_DIR}"/mise ls-remote python@"$python_version" --json | jq -r '.[].version' | sort -V | tail -n1 )
+    local final_python_version=$("${MISE_ASSET_DIR}"/mise ls-remote python@"$python_version" --json | jq -r '.[].version' | tail -n1 )
     python_version=${final_python_version:-$python_version}
     ynh_app_setting_set --key=python_version --value="$python_version"
 
