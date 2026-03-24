@@ -60,9 +60,6 @@ fi
 # - `$python_dir`, the directory containing the specific version of python, which may be used in the systemd config too (e.g. `ExecStart=__PYTHON_DIR__/python foo bar`)
 ynh_python_install() {
 
-    local MISE_CONFIG_FILE="$install_dir/mise.toml"
-    local MISE_DATA_DIR="$MISE_INSTALL_DIR/binaries"
-
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_install"
 
     # Install the requested version of Python
@@ -75,6 +72,8 @@ ynh_python_install() {
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || exit
+        local MISE_CONFIG_FILE="$install_dir/mise.toml"
+        local MISE_DATA_DIR="$MISE_INSTALL_DIR/binaries"
         ynh_exec_as_app "$MISE_ASSET_DIR"/mise use python@"$python_version"
     popd || exit
 
