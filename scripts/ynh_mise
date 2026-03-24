@@ -54,8 +54,9 @@ ynh_mise_install() {
             echo "No available mise version for this arch. Please raise an issue so we can have a look."
         fi
         popd || exit
+    fi
 
-     # Load the path of mise in $PATH
+    # Load the path of mise in $PATH
     if [[ :$PATH: != *":$MISE_BIN_DIR"* ]]; then
         PATH="$MISE_BIN_DIR:$PATH"
     fi
@@ -65,6 +66,4 @@ ynh_mise_install() {
     # This is in full lowercase such that it gets replaced in templates
     path_with_mise="$PATH"
     PATH_with_mise="$PATH"
-
-    fi
 }
