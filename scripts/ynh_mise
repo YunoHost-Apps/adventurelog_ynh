@@ -55,12 +55,16 @@ ynh_mise_install() {
         fi
         popd || exit
 
-        # Load the path of mise in $PATH
-        if [[ :$PATH: != *":$MISE_BIN_DIR"* ]]; then
+     # Load the path of mise in $PATH
+    if [[ :$PATH: != *":$MISE_BIN_DIR"* ]]; then
         PATH="$MISE_BIN_DIR:$PATH"
-        fi
-        # Export PATH such that it's available through sudo -E / ynh_exec_as $app
-        export PATH
-        
+    fi
+    # Export PATH such that it's available through sudo -E / ynh_exec_as $app
+    export PATH
+
+    # This is in full lowercase such that it gets replaced in templates
+    path_with_mise="$PATH"
+    PATH_with_mise="$PATH"
+
     fi
 }
