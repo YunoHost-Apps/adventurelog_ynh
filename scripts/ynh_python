@@ -22,13 +22,10 @@ readonly MISE_DATA_DIR="/opt/mise-global/binaries"
 export MISE_DATA_DIR
 export MISE_ASSET_DIR="/opt/mise-global/mise/bin"
 
-export CONFIG_DIR="/opt/mise-global/apps/$app"
+#export CONFIG_DIR="/opt/mise-global/apps/$app"
 
 
 _ynh_load_python_in_path_and_other_tweaks() {
-
-    mkdir --parents "${MISE_DATA_DIR}"
-    mkdir --parents "${MISE_DATA_DIR/config}"
 
     # Get the absolute path of this version of Python
     python_dir=$("$MISE_ASSET_DIR/mise" bin-paths "python@$python_version")
@@ -50,7 +47,6 @@ _ynh_load_python_in_path_and_other_tweaks() {
     path_with_python="$PATH"
     PATH_with_python="$PATH"
 
-    pip install toml pyyaml
 }
 
 # Auto-load Python path tweaks if this app uses the python resource in the manifest
@@ -74,13 +70,12 @@ ynh_python_install() {
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_install"
 
     # Install the requested version of Python
-    local final_python_version=$("${MISE_ASSET_DIR}" ls-remote python@"$python_version")
+    local final_python_version=$("${MISE_ASSET_DIR}"/mise ls-remote python@"$python_version")
     python_version=${final_python_version:-$python_version}
     ynh_app_setting_set --key=python_version --value="$python_version"
 
-    mkdir -p "${CONFIG_DIR}"
-    # Installing precompiled python
-    pushd "$CONFIG_DIR" || exit
+    # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
+    pushd "$install_dir" || exit
         ynh_mise_install
         "$MISE_ASSET_DIR"/mise use python@"$python_version"
     popd || exit
