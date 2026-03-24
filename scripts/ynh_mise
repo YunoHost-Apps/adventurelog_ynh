@@ -67,6 +67,4 @@ _ynh_load_mise_in_path_and_other_tweaks() {
     # This is in full lowercase such that it gets replaced in templates
     path_with_mise="$PATH"
     PATH_with_mise="$PATH"
-
-    mise_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise")
 }

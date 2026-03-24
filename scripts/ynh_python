@@ -23,7 +23,7 @@ export MISE_CONFIG_FILE="$install_dir/mise.toml"
 _ynh_load_python_in_path_and_other_tweaks() {
 
     # Get the absolute path of this version of Python
-    python_dir=$("$mise_dir" bin-paths "python@$python_version")
+    python_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "python@$python_version")
 
     if [ ! -e "$python_dir" ]; then
         echo "Skipping loading python, because it doesn't seem to be provisioned yet. This is likely to happen during restore and other specific contexts."
@@ -68,7 +68,7 @@ ynh_python_install() {
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_install"
 
     # Install the requested version of Python
-    local final_python_version=$("$mise_dir" ls-remote python@"$python_version" --json | jq -r '.[].version' | tail -n1 )
+    local final_python_version=$("${MISE_BIN_DIR}"/mise ls-remote python@"$python_version" --json | jq -r '.[].version' | tail -n1 )
     python_version=${final_python_version:-$python_version}
     ynh_app_setting_set --key=python_version --value="$python_version"
 
@@ -76,7 +76,7 @@ ynh_python_install() {
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
-        ynh_exec_as_app "$mise_dir" use python@"$python_version"
+        ynh_exec_as_app MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR"/mise use python@"$python_version"
     popd || ynh_die
 
     _ynh_load_python_in_path_and_other_tweaks
@@ -100,7 +100,7 @@ ynh_python_remove() {
     # Remove no more needed versions of Python used by the app.
     # This helper will check what Python version are no more required,
     # and uninstall them
-    local installed_python_versions=$("$mise_dir" ls python --json | jq -r '.[].version')
+    local installed_python_versions=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "${MISE_BIN_DIR}/mise" ls python --json | jq -r '.[].version')
     for installed_python_version in $installed_python_versions; do
         if [[ -n "$installed_python_version" ]] && ! grep -qE "^python_version: '?$installed_python_version'?" /etc/yunohost/apps/*/settings.yml; then
             ynh_print_info "Removing Python-$installed_python_version"
