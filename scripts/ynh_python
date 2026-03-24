@@ -23,7 +23,7 @@ export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
 _ynh_load_python_in_path_and_other_tweaks() {
 
     # Get the absolute path of this version of Python
-    python_dir=$($MISE_GLOBAL_CONFIG_FILE $MISE_DATA_DIR $MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "python@$python_version")
+    python_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "python@$python_version")
 
     if [ ! -e "$python_dir" ]; then
         echo "Skipping loading python, because it doesn't seem to be provisioned yet. This is likely to happen during restore and other specific contexts."
@@ -107,7 +107,7 @@ ynh_python_remove() {
 _ynh_python_cleanup() {
 
     # Remove no more needed Python versions
-    local installed_python_versions=$($MISE_GLOBAL_CONFIG_FILE $MISE_DATA_DIR $MISE_CACHE_DIR "${MISE_BIN_DIR}/mise" ls python --json | jq -r '.[].version')
+    local installed_python_versions=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "${MISE_BIN_DIR}/mise" ls python --json | jq -r '.[].version')
     for installed_python_version in $installed_python_versions; do
         if [[ -n "$installed_python_version" ]] && ! grep -qE "^python_version: '?$installed_python_version'?" /etc/yunohost/apps/*/settings.yml; then
             ynh_print_info "Removing Python-$installed_python_version"
