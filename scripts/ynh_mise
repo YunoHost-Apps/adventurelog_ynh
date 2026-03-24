@@ -25,7 +25,7 @@ export MISE_DATA_DIR="$MISE_INSTALL_DIR/mise"
 export MISE_CACHE_DIR="$MISE_INSTALL_DIR/cache"
 export MISE_GLOBAL_CONFIG_FILE="$MISE_INSTALL_DIR/config/config.toml"
 
-export MISE_VERSION=2026.3.10
+export MISE_VERSION=2026.3.13
 export MISE_ASSET_DIR="$MISE_DATA_DIR/bin"
 
 export MISE_ENV=production
