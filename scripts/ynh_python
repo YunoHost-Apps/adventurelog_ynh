@@ -35,14 +35,15 @@ _ynh_load_python_in_path_and_other_tweaks() {
         PATH="$python_dir:$PATH"
     fi
 
-    # Export PATH such that it's available through sudo -E / ynh_exec_as $app
+    # Export PATH such that it's available through sudo -E / ynh_exec_as_app
     export PATH
 
     # This is in full lowercase such that it gets replaced in templates
     path_with_python="$PATH"
     PATH_with_python="$PATH"
 
-    ynh_exec_as_app pip install --no-cache-dir toml pyyaml
+    # Install Python modules that has to be installed for YunoHost helpers to work
+    ynh_exec_as_app python_dir/python -m pip install --no-cache-dir toml pyyaml
 
 }
 
@@ -74,9 +75,9 @@ ynh_python_install() {
     ynh_mise_install
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
-    pushd "$install_dir" || exit
-        MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR"/mise use python@"$python_version"
-    popd || exit
+    pushd "$install_dir" || ynh_die
+        ynh_exec_as_app MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR"/mise use python@"$python_version"
+    popd || ynh_die
 
     _ynh_load_python_in_path_and_other_tweaks
 }
@@ -91,24 +92,14 @@ ynh_python_remove() {
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_remove"
 
     # Don’t remove anything here, because mise won’t check if another app use the same Python version and delete it anyway.
-    # Deletion will be done with _ynh_python_cleanup
+    # Deletion will be done on app uninstall (since the binaries are installed in $install_dir) or via the following helper
 
     # Remove the line for this app
     ynh_app_setting_delete --key="python_version"
 
-    # Cleanup Python versions
-    _ynh_python_cleanup
-}
-
-# Remove no more needed versions of Python used by the app.
-#
-# [internal]
-#
-# This helper will check what Python version are no more required,
-# and uninstall them
-_ynh_python_cleanup() {
-
-    # Remove no more needed Python versions
+    # Remove no more needed versions of Python used by the app.
+    # This helper will check what Python version are no more required,
+    # and uninstall them
     local installed_python_versions=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "${MISE_BIN_DIR}/mise" ls python --json | jq -r '.[].version')
     for installed_python_version in $installed_python_versions; do
         if [[ -n "$installed_python_version" ]] && ! grep -qE "^python_version: '?$installed_python_version'?" /etc/yunohost/apps/*/settings.yml; then
@@ -116,5 +107,4 @@ _ynh_python_cleanup() {
             "$MISE_BIN_DIR/mise" unuse python@"$installed_python_version"
         fi
     done
-
 }

@@ -35,24 +35,24 @@ ynh_mise_install() {
 
     if [[ ! -f "$MISE_BIN_DIR"/mise ]] || [[ "$($MISE_BIN_DIR/mise version --json | jq -r '.version' | awk '{print $1}')" != "$MISE_VERSION" ]]; then
 
-        pushd "$MISE_INSTALL_DIR"/mise || exit
-        # Install the requested version of mise
+        pushd "$MISE_INSTALL_DIR"/mise || ynh_die
+        # Install the requested version of mise 
         if [[ $YNH_ARCH == "amd64" ]]; then
-            ynh_hide_warnings wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-x64.tar.xz
+            wget --tries 3 --no-dns-cache --timeout 900 --no-verbose https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-x64.tar.xz || ynh_die
             tar -xf mise-v$MISE_VERSION-linux-x64.tar.xz --strip-components 1
             rm mise-v$MISE_VERSION-linux-x64.tar.xz
         elif [[ $YNH_ARCH == "arm64" ]]; then
-            ynh_hide_warnings wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-arm64.tar.xz
+            wget --tries 3 --no-dns-cache --timeout 900 --no-verbose https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-arm64.tar.xz || ynh_die
             tar -xf mise-v$MISE_VERSION-linux-arm64.tar.xz --strip-components 1
             rm mise-v$MISE_VERSION-linux-arm64.tar.xz
         elif [[ $YNH_ARCH == "armv7" ]]; then
-            ynh_hide_warnings wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-armv7.tar.xz
+            wget --tries 3 --no-dns-cache --timeout 900 --no-verbose https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-armv7.tar.xz || ynh_die
             tar -xf mise-v$MISE_VERSION-linux-armv7.tar.xz --strip-components 1
             rm mise-v$MISE_VERSION-linux-armv7.tar.xz
         else
             echo "No available mise version for this architecture. Please raise an issue so we can have a look."
         fi
-        popd || exit
+        popd || ynh_die
     fi
 
     _ynh_load_mise_in_path_and_other_tweaks
