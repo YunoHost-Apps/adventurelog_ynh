@@ -28,6 +28,8 @@ export MISE_GLOBAL_CONFIG_FILE="$MISE_INSTALL_DIR/config/config.toml"
 export MISE_VERSION=2026.3.10
 export MISE_ASSET_DIR="$MISE_DATA_DIR/bin"
 
+export MISE_ENV=production
+
 ynh_mise_install() {
 
     mkdir --parents "${MISE_DATA_DIR}"
@@ -54,7 +56,6 @@ ynh_mise_install() {
         fi
         popd || exit
 
-        "$MISE_ASSET_DIR"/mise --env=production
         "$MISE_ASSET_DIR"/mise settings shared_install_dirs="$MISE_INSTALL_DIR"/binaries
 
         # Load the path of mise in $PATH
