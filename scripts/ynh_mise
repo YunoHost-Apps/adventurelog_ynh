@@ -40,15 +40,15 @@ ynh_mise_install() {
         pushd "$MISE_DATA_DIR" || exit
         # Install the requested version of mise
         if [[ $YNH_ARCH == "amd64" ]]; then
-            wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-x64.tar.xz
+            ynh_hide_warnings wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-x64.tar.xz
             tar -xf mise-v$MISE_VERSION-linux-x64.tar.xz --strip-components 1
             rm mise-v$MISE_VERSION-linux-x64.tar.xz
         elif [[ $YNH_ARCH == "arm64" ]]; then
-            wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-arm64.tar.xz
+            ynh_hide_warnings wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-arm64.tar.xz
             tar -xf mise-v$MISE_VERSION-linux-arm64.tar.xz --strip-components 1
             rm mise-v$MISE_VERSION-linux-arm64.tar.xz
         elif [[ $YNH_ARCH == "armv7" ]]; then
-            wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-armv7.tar.xz
+            ynh_hide_warnings wget https://github.com/jdx/mise/releases/download/v$MISE_VERSION/mise-v$MISE_VERSION-linux-armv7.tar.xz
             tar -xf mise-v$MISE_VERSION-linux-armv7.tar.xz --strip-components 1
             rm mise-v$MISE_VERSION-linux-armv7.tar.xz
         else
