@@ -18,6 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+export MISE_CONFIG_ROOT="$MISE_INSTALL_DIR/apps/$app"
 export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
 
 _ynh_load_python_in_path_and_other_tweaks() {
@@ -71,6 +72,8 @@ ynh_python_install() {
 
     ynh_mise_install
     "$MISE_BIN_DIR"/mise version
+
+    mkdir -p $MISE_CONFIG_ROOT
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || exit
