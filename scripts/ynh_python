@@ -74,6 +74,7 @@ ynh_python_install() {
     "$MISE_BIN_DIR"/mise version
 
     mkdir -p $MISE_CONFIG_ROOT
+    touch $MISE_CONFIG_FILE
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || exit
