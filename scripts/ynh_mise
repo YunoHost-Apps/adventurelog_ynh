@@ -35,7 +35,7 @@ ynh_mise_install() {
     mkdir --parents "${MISE_DATA_DIR}"
     mkdir --parents "${MISE_DATA_DIR/config}"
 
-    if [[ ! -f "$MISE_ASSET_DIR"/mise ]] || [[ "$($MISE_ASSET_DIR/mise --version --json | jq -r '.[].version' | awk '{print $1}')" != "$MISE_VERSION" ]]; then
+    if [[ ! -f "$MISE_ASSET_DIR"/mise ]] || [[ "$($MISE_ASSET_DIR/mise version --json | jq -r '.[].version' | awk '{print $1}')" != "$MISE_VERSION" ]]; then
 
         pushd "$MISE_DATA_DIR" || exit
         # Install the requested version of mise
