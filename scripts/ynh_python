@@ -72,9 +72,10 @@ ynh_python_install() {
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || exit
-        local MISE_CONFIG_FILE="$install_dir/mise.toml"
-        local MISE_DATA_DIR="$MISE_INSTALL_DIR/binaries"
-        ynh_exec_as_app "$MISE_ASSET_DIR"/mise use python@"$python_version"
+        ynh_exec_as_app \
+        "$MISE_ASSET_DIR"/mise \
+        MISE_DATA_DIR="$MISE_INSTALL_DIR/binaries" \
+            use python@"$python_version"
     popd || exit
 
     _ynh_load_python_in_path_and_other_tweaks
