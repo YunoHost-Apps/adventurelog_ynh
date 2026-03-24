@@ -18,7 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
+export MISE_CONFIG_FILE="$install_dir/mise.toml"
 
 _ynh_load_python_in_path_and_other_tweaks() {
 
@@ -42,7 +42,7 @@ _ynh_load_python_in_path_and_other_tweaks() {
     path_with_python="$PATH"
     PATH_with_python="$PATH"
 
-    pip install toml pyyaml
+    ynh_exec_as_app pip install --no-cache-dir toml pyyaml
 
 }
 
