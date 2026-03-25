@@ -32,22 +32,22 @@ _ynh_load_nodejs_in_path_and_other_tweaks() {
         return
     fi
 
-    # Load the path of this version of uv in $PATH
-    # DO NOT load the path of the nodejs version, as it will break the use of other helpers
-    if [[ -v uv_version ]]; then
-        uv_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "uv@$uv_version")
-        if [[ :$PATH: != *":$uv_dir"* ]]; then
-            PATH="$uv_dir:$PATH"
-        fi
-        # Export PATH such that it's available through sudo -E / ynh_exec_as_app
-        export PATH
-
-        # This is in full lowercase such that it gets replaced in templates
-        # shellcheck disable=SC2034
-        path_with_uv="$PATH"
-        # shellcheck disable=SC2034
-        PATH_with_uv="$PATH"
+    # Load the path of this version of nodejs in $PATH
+    if [[ :$PATH: != *":$nodejs_dir"* ]]; then
+    PATH="$nodejs_dir:$PATH"
     fi
+    # Export PATH such that it's available through sudo -E / ynh_exec_as_app
+    export PATH
+
+    # This is in full lowercase such that it gets replaced in templates
+    # shellcheck disable=SC2034
+    path_with_nodejs="$PATH"
+    # shellcheck disable=SC2034
+    PATH_with_nodejs="$PATH"
+    fi
+
+    export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+    export NPM_CONFIG_UPDATE_NOTIFIER=false
 
 }
 
@@ -75,14 +75,6 @@ ynh_nodejs_install() {
     local final_nodejs_version=$("${MISE_BIN_DIR}"/mise ls-remote nodejs@"$nodejs_version" --json | jq -r '.[].version' | tail -n1 )
     nodejs_version=${final_nodejs_version:-$nodejs_version}
     ynh_app_setting_set --key=nodejs_version --value="$nodejs_version"
-
-    # If uv_version exist, then check it and install it too
-    if [[ -n "${uv_version:-}" ]]; then
-    # Install the requested version of nodejs
-    local final_uv_version=$("${MISE_BIN_DIR}"/mise ls-remote uv@"$uv_version" --json | jq -r '.[].version' | tail -n1 )
-    uv_version=${final_uv_version:-$uv_version}
-    ynh_app_setting_set --key=uv_version --value="$uv_version"
-    fi
 
     ynh_mise_install
 
