@@ -69,8 +69,8 @@ ynh_script_progression "Building $app's backend..."
 mkdir -p "$install_dir"/backend/server/static
 
 pushd "$install_dir"/
-    ynh_exec_as_app python3 -m venv "$install_dir/venv"
-    ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/pip" install --upgrade pip
+    ynh_exec_as_app "$python_dir/python" -m venv "$install_dir/venv"
+    ynh_hide_warnings ynh_exec_as_app "$python_dir/python" -m pip install --upgrade pip
     # Temporary fix because of an upgrade of djangorestframework breaking migration
     ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/pip" install djangorestframework==3.16.1
     ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/pip" install -r "$install_dir"/backend/server/requirements.txt
