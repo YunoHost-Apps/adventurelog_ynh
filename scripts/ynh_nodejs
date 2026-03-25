@@ -32,11 +32,12 @@ _ynh_load_nodejs_in_path_and_other_tweaks() {
         return
     fi
 
-    # Load the path of this version of nodejs in $PATH
+    # Load the path of this version of node in $PATH
     if [[ :$PATH: != *":$nodejs_dir"* ]]; then
-    PATH="$nodejs_dir:$PATH"
+        PATH="$nodejs_dir:$PATH"
     fi
-    # Export PATH such that it's available through sudo -E / ynh_exec_as_app
+
+    # Export PATH such that it's available through sudo -E / ynh_exec_as $app
     export PATH
 
     # This is in full lowercase such that it gets replaced in templates
@@ -44,19 +45,18 @@ _ynh_load_nodejs_in_path_and_other_tweaks() {
     path_with_nodejs="$PATH"
     # shellcheck disable=SC2034
     PATH_with_nodejs="$PATH"
-    fi
 
+    # Prevent yet another Node and Corepack madness, with Corepack wanting the user to confirm download of Yarn
     export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
     export NPM_CONFIG_UPDATE_NOTIFIER=false
-
 }
 
-# Auto-load nodejs path tweaks if this app uses the nodejs resource in the manifest
+# Auto-load Nodejs path tweaks if this app uses the nodejs resource in the manifest
 if [ -n "${nodejs_version:-}" ] && (cat "$YNH_APP_BASEDIR/manifest.toml" | toml_to_json | jq -e ".resources.nodejs" > /dev/null); then
     _ynh_load_nodejs_in_path_and_other_tweaks
 fi
 
-# Install a specific version of nodejs using mise
+# Install a specific version of nodejs, using mise
 #
 # The installed version is defined by `$nodejs_version` which should be defined as global prior to calling this helper
 #
@@ -90,7 +90,7 @@ ynh_nodejs_install() {
     _ynh_load_nodejs_in_path_and_other_tweaks
 }
 
-# Remove the version of nodejs used by the app.
+# Remove the version of node used by the app.
 #
 # This helper will also cleanup unused nodejs versions
 #
@@ -99,7 +99,6 @@ ynh_nodejs_remove() {
 
     [[ -n "${nodejs_version:-}" ]] || ynh_die "\$nodejs_version should be defined prior to calling ynh_nodejs_remove"
 
-    # Remove the line for this app
     ynh_app_setting_delete --key="nodejs_version"
 
     # Remove no more needed versions of nodejs used by the app.
