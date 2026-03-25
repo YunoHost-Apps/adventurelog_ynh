@@ -24,7 +24,6 @@ _ynh_load_python_in_path_and_other_tweaks() {
 
     # Get the absolute path of this version of Python
     python_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "python@$python_version")
-    uv_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "uv@$uv_version")
 
     if [ ! -e "$python_dir" ]; then
         echo "Skipping loading python, because it doesn't seem to be provisioned yet. This is likely to happen during restore and other specific contexts."
@@ -34,16 +33,16 @@ _ynh_load_python_in_path_and_other_tweaks() {
     # Load the path of this version of uv in $PATH
     # DO NOT load the path of the python version, as it will break the use of other helpers
     if [[ -v uv_version ]]; then
+        uv_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "uv@$uv_version")
         if [[ :$PATH: != *":$uv_dir"* ]]; then
             PATH="$uv_dir:$PATH"
         fi
+        # Export PATH such that it's available through sudo -E / ynh_exec_as_app
+        export PATH
+
+        path_with_uv="$PATH"
+        PATH_with_uv="$PATH"
     fi
-
-    # Export PATH such that it's available through sudo -E / ynh_exec_as_app
-    export PATH
-
-    path_with_uv="$PATH"
-    PATH_with_uv="$PATH"
 
 }
 
