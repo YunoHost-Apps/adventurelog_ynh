@@ -87,7 +87,6 @@ ynh_script_progression "Building $app's frontend..."
 pushd "$install_dir/frontend"
 	export CYPRESS_INSTALL_BINARY=0
     ynh_hide_warnings corepack enable
-    ynh_hide_warnings npm install -g corepack@latest
     ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@9 --activate
     ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm install --frozen-lockfile --aggregate-output
     ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm run build
