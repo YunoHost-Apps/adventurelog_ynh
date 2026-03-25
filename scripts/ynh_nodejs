@@ -70,8 +70,8 @@ fi
 ynh_nodejs_install() {
 
     ynh_mise_install
-    touch "$MISE_CONFIG_FILE"
-    chown -R "$app":"$app" "$install_dir"/mise
+    #touch "$MISE_CONFIG_FILE"
+    #chown -R "$app":"$app" "$install_dir"/mise
 
     [[ -n "${nodejs_version:-}" ]] || ynh_die "\$nodejs_version should be defined prior to calling ynh_nodejs_install"
 
@@ -83,7 +83,7 @@ ynh_nodejs_install() {
     # Installing precompiled nodejs from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
         ynh_hide_warnings MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" "$MISE_BIN_DIR"/mise use nodejs@"$nodejs_version"
-        chown -R "$app":"$app" "$install_dir"/mise
+        #chown -R "$app":"$app" "$install_dir"/mise
     popd || ynh_die
 
     _ynh_load_nodejs_in_path_and_other_tweaks

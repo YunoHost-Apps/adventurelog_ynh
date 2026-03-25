@@ -68,8 +68,8 @@ fi
 ynh_python_install() {
 
     ynh_mise_install
-    touch "$MISE_CONFIG_FILE"
-    chown -R "$app":"$app" "$install_dir"/mise
+    #touch "$MISE_CONFIG_FILE"
+    #chown -R "$app":"$app" "$install_dir"/mise
 
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_install"
 

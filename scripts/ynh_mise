@@ -29,6 +29,7 @@ export MISE_BIN_DIR="$MISE_INSTALL_DIR/mise/bin"
 #export MISE_CACHE_DIR="$install_dir/mise/cache"
 #export MISE_STATE_DIR="$install_dir/mise/state"
 
+export MISE_CONFIG_ROOT="$MISE_INSTALL_DIR/apps/$app"
 export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
 export MISE_DATA_DIR="$MISE_INSTALL_DIR/binaries/"
 export MISE_CACHE_DIR="$MISE_INSTALL_DIR/cache"
@@ -38,6 +39,8 @@ ynh_mise_install() {
 
     mkdir -p "${MISE_INSTALL_DIR}/mise"
     mkdir -p "${MISE_DATA_DIR}"
+    mkdir -p "${MISE_CONFIG_ROOT}"
+    touch "$MISE_CONFIG_FILE"
 
     if [[ ! -f "$MISE_BIN_DIR"/mise ]] || [[ "$($MISE_BIN_DIR/mise version --json | jq -r '.version' | awk '{print $1}')" != "$MISE_VERSION" ]]; then
 
