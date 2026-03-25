@@ -19,7 +19,9 @@
 #
 
 # export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
+export MISE_CONFIG_ROOT="$MISE_INSTALL_DIR/apps/$app"
 export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
+
 export MISE_NODE_COREPACK=true
 
 # [internal]
@@ -71,6 +73,7 @@ fi
 ynh_nodejs_install() {
 
     ynh_mise_install
+    mkdir -p "$MISE_CONFIG_ROOT"
     touch "$MISE_CONFIG_FILE"
     chown -R "$app":"$app" "$install_dir"/mise
 

@@ -19,6 +19,7 @@
 #
 
 # export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
+export MISE_CONFIG_ROOT="$MISE_INSTALL_DIR/apps/$app"
 export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
 
 _ynh_load_python_in_path_and_other_tweaks() {
@@ -69,6 +70,7 @@ fi
 ynh_python_install() {
 
     ynh_mise_install
+    mkdir -p "$MISE_CONFIG_ROOT"
     touch "$MISE_CONFIG_FILE"
     chown -R "$app":"$app" "$install_dir"/mise
 
