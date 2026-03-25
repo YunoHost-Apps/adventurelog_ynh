@@ -70,7 +70,7 @@ mkdir -p "$install_dir"/backend/server/static
 
 pushd "$install_dir"/
     ynh_exec_as_app uv --quiet venv "$install_dir/venv"
-    ynh_exec_as_app uv --quiet pip --no-cache-dir install --upgrade "$pip_required"
+    ynh_exec_as_app uv --quiet pip --no-cache-dir install --upgrade pip
     ynh_hide_warnings ynh_exec_as_app uv --quiet pip --no-cache-dir install --upgrade pip
     ynh_hide_warnings ynh_exec_as_app uv --quiet pip --no-cache-dir install -r "$install_dir"/backend/server/requirements.txt
     ynh_hide_warnings ynh_exec_as_app "$install_dir/venv/bin/python" backend/server/manage.py collectstatic --noinput --verbosity 2
