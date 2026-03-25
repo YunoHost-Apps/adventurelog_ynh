@@ -18,6 +18,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
+
 _ynh_load_python_in_path_and_other_tweaks() {
 
     # Get the absolute path of this version of Python
@@ -65,10 +67,6 @@ fi
 # - `$python_dir`, the directory containing the specific version of python, which may be used in the systemd config too (e.g. `ExecStart=__PYTHON_DIR__/python foo bar`)
 ynh_python_install() {
 
-    ynh_mise_install
-    touch "$MISE_CONFIG_FILE"
-    chown -R "$app":"$app" "$install_dir"/mise
-
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_install"
 
     # Install the requested version of Python
@@ -83,6 +81,11 @@ ynh_python_install() {
     uv_version=${final_uv_version:-$uv_version}
     ynh_app_setting_set --key=uv_version --value="$uv_version"
     fi
+
+    ynh_mise_install
+
+    touch "$MISE_CONFIG_FILE"
+    chown -R "$app":"$app" "$install_dir"/mise
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
