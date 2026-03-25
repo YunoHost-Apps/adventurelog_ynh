@@ -19,6 +19,7 @@
 #
 
 export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
+export MISE_NODE_COREPACK=true
 
 # [internal]
 _ynh_load_nodejs_in_path_and_other_tweaks() {
