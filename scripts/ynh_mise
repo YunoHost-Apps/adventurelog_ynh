@@ -65,6 +65,8 @@ _ynh_load_mise_in_path_and_other_tweaks() {
     fi
 
     # This is in full lowercase such that it gets replaced in templates
+    # shellcheck disable=SC2034
     path_with_mise="$PATH"
+    # shellcheck disable=SC2034
     PATH_with_mise="$PATH"
 }
