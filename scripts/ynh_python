@@ -72,7 +72,7 @@ ynh_python_install() {
     ynh_mise_install
     mkdir -p "$MISE_CONFIG_ROOT"
     touch "$MISE_CONFIG_FILE"
-    #chown -R "$app":"$app" "$install_dir"/mise
+    chown -R "$app":"$app" "$MISE_CONFIG_ROOT"
 
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_install"
 
