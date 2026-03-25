@@ -26,7 +26,6 @@ _ynh_load_python_in_path_and_other_tweaks() {
     python_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "python@$python_version")
     uv_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "uv@$uv_version")
 
-
     if [ ! -e "$python_dir" ]; then
         echo "Skipping loading python, because it doesn't seem to be provisioned yet. This is likely to happen during restore and other specific contexts."
         return
@@ -38,7 +37,7 @@ _ynh_load_python_in_path_and_other_tweaks() {
     fi
 
     # Load the path of this version of Python in $PATH
-    if [[ -n "${uv_version:-}" ]]; then
+    if [[ -v uv_version ]]; then
         if [[ :$PATH: != *":$python_dir"* ]]; then
             PATH="$python_dir:$PATH"
         fi
@@ -99,9 +98,9 @@ ynh_python_install() {
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
-        ynh_exec_as_app MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR"/mise use python@"$python_version"
-        if [[ -n "${uv_version:-}" ]]; then
-            ynh_exec_as_app MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR"/mise use uv@"$uv_version"
+        ynh_hide_warnings ynh_exec_as_app MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR"/mise use python@"$python_version"
+        if [[ -v uv_version ]]; then
+            ynh_hide_warnings ynh_exec_as_app MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR"/mise use uv@"$uv_version"
         fi
         chown -R "$app":"$app" "$install_dir"/mise
     popd || ynh_die
