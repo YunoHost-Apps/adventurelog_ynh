@@ -107,7 +107,7 @@ ynh_nodejs_remove() {
     local installed_nodejs_versions=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "${MISE_BIN_DIR}/mise" ls nodejs --json | jq -r '.[].version')
     for installed_nodejs_version in $installed_nodejs_versions; do
         if [[ -n "$installed_nodejs_version" ]] && ! grep -qE "^nodejs_version: '?$installed_nodejs_version'?" /etc/yunohost/apps/*/settings.yml; then
-            ynh_print_info "Removing nodejs$installed_nodejs_version"
+            ynh_print_info "Removing nodejs@$installed_nodejs_version"
             ynh_hide_warnings "$MISE_BIN_DIR/mise" unuse nodejs@"$installed_nodejs_version"
         fi
     done

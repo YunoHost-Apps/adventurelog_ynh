@@ -24,10 +24,15 @@ readonly MISE_INSTALL_DIR="/opt/mise-global"
 export MISE_INSTALL_DIR
 export MISE_BIN_DIR="$MISE_INSTALL_DIR/mise/bin"
 
-export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
-export MISE_DATA_DIR="$install_dir/mise/"
-export MISE_CACHE_DIR="$install_dir/mise/cache"
-export MISE_STATE_DIR="$install_dir/mise/state"
+#export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
+#export MISE_DATA_DIR="$install_dir/mise/"
+#export MISE_CACHE_DIR="$install_dir/mise/cache"
+#export MISE_STATE_DIR="$install_dir/mise/state"
+
+export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/mise.toml"
+export MISE_DATA_DIR="$MISE_INSTALL_DIR/binaries/"
+export MISE_CACHE_DIR="$MISE_INSTALL_DIR/cache"
+export MISE_STATE_DIR="$MISE_INSTALL_DIR/state"
 
 ynh_mise_install() {
 
@@ -57,17 +62,4 @@ ynh_mise_install() {
     fi
 
     _ynh_load_mise_in_path_and_other_tweaks
-}
-
-_ynh_load_mise_in_path_and_other_tweaks() {
-    # Load the path of mise in $PATH
-    if [[ :$PATH: != *":$MISE_BIN_DIR"* ]]; then
-        PATH="$MISE_BIN_DIR:$PATH"
-    fi
-
-    # This is in full lowercase such that it gets replaced in templates
-    # shellcheck disable=SC2034
-    path_with_mise="$PATH"
-    # shellcheck disable=SC2034
-    PATH_with_mise="$PATH"
 }
