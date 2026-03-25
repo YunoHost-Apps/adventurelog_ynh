@@ -75,7 +75,7 @@ ynh_nodejs_install() {
     ynh_mise_install
     mkdir -p "$MISE_CONFIG_ROOT"
     touch "$MISE_CONFIG_FILE"
-    chown -R "$app":"$app" "$install_dir"/mise
+    #chown -R "$app":"$app" "$install_dir"/mise
 
     [[ -n "${nodejs_version:-}" ]] || ynh_die "\$nodejs_version should be defined prior to calling ynh_nodejs_install"
 
