@@ -38,7 +38,7 @@ _ynh_load_python_in_path_and_other_tweaks() {
 
     # Load the path of this version of Python in $PATH
     if [[ -v uv_version ]]; then
-        if [[ :$PATH: != *":$python_dir"* ]]; then
+        if [[ :$PATH: != *":$uv_dir"* ]]; then
             PATH="$uv_dir:$PATH"
         fi
     fi
