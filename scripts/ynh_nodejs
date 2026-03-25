@@ -18,7 +18,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
+# export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
+export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
 export MISE_NODE_COREPACK=true
 
 # [internal]
