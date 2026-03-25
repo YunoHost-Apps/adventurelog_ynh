@@ -60,6 +60,4 @@ ynh_mise_install() {
         fi
         popd || ynh_die
     fi
-
-    _ynh_load_mise_in_path_and_other_tweaks
 }
