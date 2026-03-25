@@ -18,7 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-export MISE_VERSION=2026.3.13
+export MISE_VERSION=2026.3.14
 
 readonly MISE_INSTALL_DIR="/opt/mise-global"
 export MISE_INSTALL_DIR

@@ -24,6 +24,8 @@ _ynh_load_python_in_path_and_other_tweaks() {
 
     # Get the absolute path of this version of Python
     python_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "python@$python_version")
+    uv_dir=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR/mise" bin-paths "uv@$uv_version")
+
 
     if [ ! -e "$python_dir" ]; then
         echo "Skipping loading python, because it doesn't seem to be provisioned yet. This is likely to happen during restore and other specific contexts."
@@ -35,12 +37,22 @@ _ynh_load_python_in_path_and_other_tweaks() {
         PATH="$python_dir:$PATH"
     fi
 
+    # Load the path of this version of Python in $PATH
+    if [[ -n "${uv_version:-}" ]]; then
+        if [[ :$PATH: != *":$python_dir"* ]]; then
+            PATH="$python_dir:$PATH"
+        fi
+    fi
+
     # Export PATH such that it's available through sudo -E / ynh_exec_as_app
     export PATH
 
     # This is in full lowercase such that it gets replaced in templates
     path_with_python="$PATH"
     PATH_with_python="$PATH"
+
+    path_with_uv="$PATH"
+    PATH_with_uv="$PATH"
 
     # Install Python modules that has to be installed for YunoHost helpers to work
     ynh_exec_as_app $python_dir/python -m pip install --no-cache-dir toml pyyaml
@@ -72,6 +84,14 @@ ynh_python_install() {
     python_version=${final_python_version:-$python_version}
     ynh_app_setting_set --key=python_version --value="$python_version"
 
+    # If uv_version exist, then check it and install it too
+    if [[ -n "${uv_version:-}" ]]; then
+    # Install the requested version of Python
+    local final_uv_version=$("${MISE_BIN_DIR}"/mise ls-remote uv@"$uv_version" --json | jq -r '.[].version' | tail -n1 )
+    uv_version=${final_uv_version:-$uv_version}
+    ynh_app_setting_set --key=uv_version --value="$uv_version"
+    fi
+
     ynh_mise_install
 
     touch $MISE_CONFIG_FILE
@@ -80,6 +100,9 @@ ynh_python_install() {
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
         ynh_exec_as_app MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR"/mise use python@"$python_version"
+        if [[ -n "${uv_version:-}" ]]; then
+            ynh_exec_as_app MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "$MISE_BIN_DIR"/mise use uv@"$uv_version"
+        fi
         chown -R "$app":"$app" "$install_dir"/mise
     popd || ynh_die
 
@@ -107,8 +130,17 @@ ynh_python_remove() {
     local installed_python_versions=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "${MISE_BIN_DIR}/mise" ls python --json | jq -r '.[].version')
     for installed_python_version in $installed_python_versions; do
         if [[ -n "$installed_python_version" ]] && ! grep -qE "^python_version: '?$installed_python_version'?" /etc/yunohost/apps/*/settings.yml; then
-            ynh_print_info "Removing Python-$installed_python_version"
-            "$MISE_BIN_DIR/mise" unuse python@"$installed_python_version"
+            ynh_print_info "Removing python$installed_python_version"
+            ynh_hide_warnings "$MISE_BIN_DIR/mise" unuse python@"$installed_python_version"
+        fi
+    done
+
+    # Same for uv
+    local installed_uv_versions=$(MISE_CONFIG_FILE=$MISE_CONFIG_FILE MISE_DATA_DIR=$MISE_DATA_DIR MISE_CACHE_DIR=$MISE_CACHE_DIR "${MISE_BIN_DIR}/mise" ls uv --json | jq -r '.[].version')
+    for installed_uv_version in $installed_uv_versions; do
+        if [[ -n "$installed_uv_version" ]] && ! grep -qE "^python_version: '?$installed_uv_version'?" /etc/yunohost/apps/*/settings.yml; then
+            ynh_print_info "Removing uv-$installed_python_version"
+            ynh_hide_warnings "$MISE_BIN_DIR/mise" unuse uv@"$installed_uv_version"
         fi
     done
 }
