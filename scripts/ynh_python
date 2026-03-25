@@ -31,12 +31,8 @@ _ynh_load_python_in_path_and_other_tweaks() {
         return
     fi
 
-    # Load the path of this version of Python in $PATH
-    #if [[ :$PATH: != *":$python_dir"* ]]; then
-    #    PATH="$python_dir:$PATH"
-    #fi
-
-    # Load the path of this version of Python in $PATH
+    # Load the path of this version of uv in $PATH
+    # DO NOT load the path of the python version, as it will break the use of other helpers
     if [[ -v uv_version ]]; then
         if [[ :$PATH: != *":$uv_dir"* ]]; then
             PATH="$uv_dir:$PATH"
@@ -46,15 +42,8 @@ _ynh_load_python_in_path_and_other_tweaks() {
     # Export PATH such that it's available through sudo -E / ynh_exec_as_app
     export PATH
 
-    # This is in full lowercase such that it gets replaced in templates
-    #path_with_python="$PATH"
-    #PATH_with_python="$PATH"
-
     path_with_uv="$PATH"
     PATH_with_uv="$PATH"
-
-    # Install Python modules that has to be installed for YunoHost helpers to work
-    ynh_exec_as_app "$python_dir/python" -m pip install --no-cache-dir toml pyyaml
 
 }
 
