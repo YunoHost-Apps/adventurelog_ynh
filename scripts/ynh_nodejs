@@ -18,10 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-# export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
-export MISE_CONFIG_ROOT="$MISE_INSTALL_DIR/apps/$app"
-export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
-
+#export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
 export MISE_NODE_COREPACK=true
 
 # [internal]
@@ -73,9 +70,8 @@ fi
 ynh_nodejs_install() {
 
     ynh_mise_install
-    mkdir -p "$MISE_CONFIG_ROOT"
     touch "$MISE_CONFIG_FILE"
-    chown -R "$app":"$app" "$MISE_CONFIG_ROOT"
+    chown -R "$app":"$app" "$install_dir"/mise
 
     [[ -n "${nodejs_version:-}" ]] || ynh_die "\$nodejs_version should be defined prior to calling ynh_nodejs_install"
 
@@ -86,7 +82,7 @@ ynh_nodejs_install() {
 
     # Installing precompiled nodejs from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
-        ynh_hide_warnings ynh_exec_as_app MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" "$MISE_BIN_DIR"/mise use nodejs@"$nodejs_version"
+        ynh_hide_warnings MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" "$MISE_BIN_DIR"/mise use nodejs@"$nodejs_version"
         chown -R "$app":"$app" "$install_dir"/mise
     popd || ynh_die
 

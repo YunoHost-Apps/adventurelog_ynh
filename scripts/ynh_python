@@ -18,9 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-# export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
-export MISE_CONFIG_ROOT="$MISE_INSTALL_DIR/apps/$app"
-export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
+#export MISE_CONFIG_FILE="$install_dir/mise/mise.toml"
 
 _ynh_load_python_in_path_and_other_tweaks() {
 
@@ -70,9 +68,8 @@ fi
 ynh_python_install() {
 
     ynh_mise_install
-    mkdir -p "$MISE_CONFIG_ROOT"
     touch "$MISE_CONFIG_FILE"
-    chown -R "$app":"$app" "$MISE_CONFIG_ROOT"
+    chown -R "$app":"$app" "$install_dir"/mise
 
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_install"
 
@@ -91,9 +88,9 @@ ynh_python_install() {
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
-        ynh_hide_warnings ynh_exec_as_app MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" MISE_STATE_DIR="$MISE_STATE_DIR" "$MISE_BIN_DIR"/mise use python@"$python_version"
+        ynh_hide_warnings MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" MISE_STATE_DIR="$MISE_STATE_DIR" "$MISE_BIN_DIR"/mise use python@"$python_version"
         if [[ -v uv_version ]]; then
-            ynh_hide_warnings ynh_exec_as_app MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" MISE_STATE_DIR="$MISE_STATE_DIR" "$MISE_BIN_DIR"/mise use uv@"$uv_version"
+            ynh_hide_warnings MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" MISE_STATE_DIR="$MISE_STATE_DIR" "$MISE_BIN_DIR"/mise use uv@"$uv_version"
         fi
         chown -R "$app":"$app" "$install_dir"/mise
     popd || ynh_die
