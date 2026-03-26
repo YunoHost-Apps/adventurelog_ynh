@@ -23,8 +23,9 @@ ynh_app_setting_set --key=key --value=$key
 # Not saved by default
 ynh_app_setting_set --key=password --value="$password"
 
-ynh_python_install
 ynh_nodejs_install
+ynh_python_install
+
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
