@@ -61,8 +61,8 @@ ynh_mise_install() {
 
 _ynh_load_mise_in_path_and_other_tweaks() {
     # Load the path of this version of node in $PATH
-    if [[ :$PATH: != *":$mise_dir"* ]]; then
-        PATH="$mise_dir:$PATH"
+    if [[ :$PATH: != *":$MISE_BIN_DIR"* ]]; then
+        PATH="$MISE_BIN_DIR:$PATH"
     fi
 
     # Export PATH such that it's available through sudo -E / ynh_exec_as $app
