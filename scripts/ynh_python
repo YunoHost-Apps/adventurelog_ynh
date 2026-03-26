@@ -18,6 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+# [internal]
 _ynh_load_python_in_path_and_other_tweaks() {
 
     # Get the absolute path of this version of Python
@@ -99,15 +100,17 @@ ynh_python_install() {
 #
 # usage: ynh_python_remove
 ynh_python_remove() {
-    _ynh_python_cleanup
-}
-
-_ynh_python_cleanup() {
 
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_remove"
 
     # Remove the line for this app
     ynh_app_setting_delete --key="python_version"
+
+    # Cleanup Python versions
+    _ynh_python_cleanup
+}
+
+_ynh_python_cleanup() {
 
     # Remove no more needed versions of Python used by the app.
     # This helper will check what Python version are no more required,
