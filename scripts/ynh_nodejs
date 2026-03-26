@@ -79,7 +79,9 @@ ynh_nodejs_install() {
 
     # Installing precompiled nodejs from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
-        MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" "$MISE_BIN_DIR"/mise use nodejs@"$nodejs_version"
+        # The path has to be set for npm to now where to find node
+        PATH="$MISE_DATA_DIR/installs/node/$nodejs_version/bin:$PATH"
+        ynh_hide_warnings env MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" "$MISE_BIN_DIR"/mise use nodejs@"$nodejs_version"
     popd || ynh_die
 
     _ynh_load_nodejs_in_path_and_other_tweaks

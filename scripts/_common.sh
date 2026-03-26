@@ -5,4 +5,4 @@
 #=================================================
 
 python_version=3.13
-nodejs_version=22
+nodejs_version=20.15.1

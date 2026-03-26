@@ -84,9 +84,9 @@ ynh_python_install() {
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
-        MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" MISE_STATE_DIR="$MISE_STATE_DIR" "$MISE_BIN_DIR"/mise use python@"$python_version"
+        ynh_hide_warnings env MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" MISE_STATE_DIR="$MISE_STATE_DIR" "$MISE_BIN_DIR"/mise use python@"$python_version"
         if [[ -v uv_version ]]; then
-            MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" MISE_STATE_DIR="$MISE_STATE_DIR" "$MISE_BIN_DIR"/mise use uv@"$uv_version"
+            ynh_hide_warnings env MISE_CONFIG_FILE="$MISE_CONFIG_FILE" MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" MISE_STATE_DIR="$MISE_STATE_DIR" "$MISE_BIN_DIR"/mise use uv@"$uv_version"
         fi
     popd || ynh_die
 
