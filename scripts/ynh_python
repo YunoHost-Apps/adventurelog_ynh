@@ -91,6 +91,8 @@ ynh_python_install() {
     popd || ynh_die
 
     _ynh_load_python_in_path_and_other_tweaks
+
+    _ynh_python_cleanup
 }
 
 # Remove the version of Python used by the app.
@@ -99,6 +101,10 @@ ynh_python_install() {
 #
 # usage: ynh_python_remove
 ynh_python_remove() {
+    _ynh_python_cleanup
+}
+
+_ynh_python_cleanup() {
 
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_remove"
 

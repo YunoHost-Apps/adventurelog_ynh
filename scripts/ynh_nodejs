@@ -85,6 +85,8 @@ ynh_nodejs_install() {
     popd || ynh_die
 
     _ynh_load_nodejs_in_path_and_other_tweaks
+
+    _ynh_nodejs_cleanup
 }
 
 # Remove the version of node used by the app.
@@ -93,7 +95,10 @@ ynh_nodejs_install() {
 #
 # usage: ynh_nodejs_remove
 ynh_nodejs_remove() {
+    _ynh_nodejs_cleanup
+}
 
+_ynh_nodejs_cleanup() {
     [[ -n "${nodejs_version:-}" ]] || ynh_die "\$nodejs_version should be defined prior to calling ynh_nodejs_remove"
 
     ynh_app_setting_delete --key="nodejs_version"
