@@ -106,7 +106,7 @@ ynh_nodejs_remove() {
         if [[ -n "$installed_nodejs_version" ]] && ! grep -qE "^nodejs_version: '?$installed_nodejs_version'?" /etc/yunohost/apps/*/settings.yml; then
             ynh_print_info "Removing nodejs@$installed_nodejs_version"
             ynh_hide_warnings "$MISE_BIN_DIR/mise" unuse nodejs@"$installed_nodejs_version"
-            ynh_hide_warnings "$MISE_BIN_DIR/mise" prune nodejs@"$installed_nodejs_version"
+            ynh_hide_warnings "$MISE_BIN_DIR/mise" uninstall nodejs@"$installed_nodejs_version"
         fi
     done
 }

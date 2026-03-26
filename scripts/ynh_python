@@ -113,7 +113,7 @@ ynh_python_remove() {
         if [[ -n "$installed_python_version" ]] && ! grep -qE "^python_version: '?$installed_python_version'?" /etc/yunohost/apps/*/settings.yml; then
             ynh_print_info "Removing python@$installed_python_version"
             ynh_hide_warnings "$MISE_BIN_DIR/mise" unuse python@"$installed_python_version"
-            ynh_hide_warnings "$MISE_BIN_DIR/mise" prune python@"$installed_python_version"
+            ynh_hide_warnings "$MISE_BIN_DIR/mise" uninstall python@"$installed_python_version"
         fi
     done
 
@@ -123,7 +123,7 @@ ynh_python_remove() {
         if [[ -n "$installed_uv_version" ]] && ! grep -qE "^python_version: '?$installed_uv_version'?" /etc/yunohost/apps/*/settings.yml; then
             ynh_print_info "Removing uv@$installed_python_version"
             ynh_hide_warnings "$MISE_BIN_DIR/mise" unuse uv@"$installed_uv_version"
-            ynh_hide_warnings "$MISE_BIN_DIR/mise" prune uv@"$installed_uv_version"
+            ynh_hide_warnings "$MISE_BIN_DIR/mise" uninstall uv@"$installed_uv_version"
         fi
     done
 }
