@@ -91,8 +91,6 @@ ynh_python_install() {
     popd || ynh_die
 
     _ynh_load_python_in_path_and_other_tweaks
-
-    _ynh_python_cleanup
 }
 
 # Remove the version of Python used by the app.
@@ -126,7 +124,7 @@ _ynh_python_cleanup() {
     # Same for uv
     local installed_uv_versions=$(MISE_DATA_DIR="$MISE_DATA_DIR" MISE_CACHE_DIR="$MISE_CACHE_DIR" MISE_STATE_DIR="$MISE_STATE_DIR" "${MISE_BIN_DIR}/mise" ls uv --json | jq -r '.[].version')
     for installed_uv_version in $installed_uv_versions; do
-        if [[ -n "$installed_uv_version" ]] && ! grep -qE "^python_version: '?$installed_uv_version'?" /etc/yunohost/apps/*/settings.yml; then
+        if [[ -n "$installed_uv_version" ]] && ! grep -qE "^uv_version: '?$installed_uv_version'?" /etc/yunohost/apps/*/settings.yml; then
             ynh_print_info "Removing uv@$installed_python_version"
             ynh_hide_warnings "$MISE_BIN_DIR/mise" unuse uv@"$installed_uv_version"
             ynh_hide_warnings "$MISE_BIN_DIR/mise" uninstall uv@"$installed_uv_version"
