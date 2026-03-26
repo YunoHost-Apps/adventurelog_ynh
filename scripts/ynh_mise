@@ -27,7 +27,7 @@ export MISE_BIN_DIR="$MISE_INSTALL_DIR/mise/bin"
 export MISE_CONFIG_ROOT="$MISE_INSTALL_DIR/apps/$app"
 export MISE_CONFIG_FILE="$MISE_INSTALL_DIR/apps/$app/mise.toml"
 export MISE_DATA_DIR="$MISE_INSTALL_DIR/binaries/"
-export MISE_CACHE_DIR="$MISE_INSTALL_DIRr/cache"
+export MISE_CACHE_DIR="$MISE_INSTALL_DIR/cache"
 export MISE_STATE_DIR="$MISE_INSTALL_DIR/state"
 
 ynh_mise_install() {
