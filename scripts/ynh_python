@@ -68,6 +68,8 @@ ynh_python_install() {
 
     [[ -n "${python_version:-}" ]] || ynh_die "\$python_version should be defined prior to calling ynh_python_install"
 
+    ynh_mise_install
+
     # Install the requested version of Python
     local final_python_version=$("${MISE_BIN_DIR}"/mise ls-remote python@"$python_version" --json | jq -r '.[].version' | tail -n1 )
     python_version=${final_python_version:-$python_version}
@@ -80,8 +82,6 @@ ynh_python_install() {
     uv_version=${final_uv_version:-$uv_version}
     ynh_app_setting_set --key=uv_version --value="$uv_version"
     fi
-
-    ynh_mise_install
 
     # Installing precompiled python from the $install_dir so the created mise.toml will be at the right place
     pushd "$install_dir" || ynh_die
