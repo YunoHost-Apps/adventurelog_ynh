@@ -4,8 +4,11 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-
+source _common.sh
 source /usr/share/yunohost/helpers
+source ynh_mise
+source ynh_python
+source ynh_nodejs
 
 #=================================================
 # REMOVE SYSTEM CONFIGURATION
@@ -30,6 +33,9 @@ ynh_config_remove_systemd "${app}-backend"
 ynh_config_remove_systemd "${app}-frontend"
 
 ynh_config_remove_nginx
+
+ynh_python_remove
+ynh_nodejs_remove
 
 #=================================================
 # END OF SCRIPT
