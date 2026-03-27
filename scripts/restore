@@ -10,6 +10,9 @@ source ../settings/scripts/ynh_mise
 source ../settings/scripts/ynh_python
 source ../settings/scripts/ynh_nodejs
 
+ynh_nodejs_install
+ynh_python_install
+
 #=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================

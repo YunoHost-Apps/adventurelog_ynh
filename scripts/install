@@ -26,7 +26,6 @@ ynh_app_setting_set --key=password --value="$password"
 ynh_nodejs_install
 ynh_python_install
 
-
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
