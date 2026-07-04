@@ -15,8 +15,6 @@ ExecStart=__INSTALL_DIR__/venv/bin/gunicorn main.wsgi:application -b 127.0.0.1:_
 StandardOutput=append:/var/log/__APP__/__APP__-backend.log
 StandardError=append:/var/log/__APP__/__APP__-backend.log
 
-### Depending on specificities of your service/app, you may need to tweak these
-### .. but this should be a good baseline
 # Sandboxing options to harden security
 # Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
 NoNewPrivileges=yes
@@ -33,6 +31,12 @@ ProtectKernelModules=yes
 ProtectKernelTunables=yes
 LockPersonality=yes
 SystemCallArchitectures=native
+RestrictNamespaces=yes
+RestrictSUIDSGID=yes
+MemoryDenyWriteExecute=yes
+ProtectKernelLogs=yes
+ProtectProc=invisible
+SecureBits=noroot
 
 # Denying access to capabilities that should not be relevant for webapps
 # Doc: https://man7.org/linux/man-pages/man7/capabilities.7.html

@@ -11,6 +11,7 @@ source ../settings/scripts/ynh_nodejs
 source /usr/share/yunohost/helpers
 
 ynh_python_install
+ynh_nodejs_install
 
 #=================================================
 # RESTORE THE APP MAIN DIR

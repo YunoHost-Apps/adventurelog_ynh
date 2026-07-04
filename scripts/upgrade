@@ -18,6 +18,7 @@ admin=$(ynh_user_get_info --username=$admin --key=username)
 admin_mail=$(ynh_user_get_info --username=$admin --key=mail)
 
 ynh_python_install
+ynh_nodejs_install
 
 #=================================================
 # STOP SYSTEMD SERVICE
@@ -74,9 +75,9 @@ ynh_script_progression "Building $app's frontend..."
 
 pushd "$install_dir/frontend"
 	export CYPRESS_INSTALL_BINARY=0
-    ynh_hide_warnings corepack enable
+    corepack enable
     ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@9 --activate
-    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm install --frozen-lockfile --aggregate-output
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm install --no-frozen-lockfile --aggregate-output
     ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm run build
 
     #remove unneeded files

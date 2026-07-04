@@ -55,6 +55,9 @@ ram.runtime = "50M"
     sha256 = "7c1fdbaf8dc1c8d575b175aca7298a7df36fc427c45e6e988672c5d9b5474c57"
 
     autoupdate.strategy = "latest_github_release"
+    
+    [resources.nodejs]
+    version = "22"
 
     [resources.system_user]
     allow_email = true
