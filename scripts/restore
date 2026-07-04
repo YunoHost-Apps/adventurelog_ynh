@@ -10,7 +10,6 @@ source ../settings/scripts/ynh_python
 source ../settings/scripts/ynh_nodejs
 source /usr/share/yunohost/helpers
 
-ynh_nodejs_install
 ynh_python_install
 
 #=================================================
