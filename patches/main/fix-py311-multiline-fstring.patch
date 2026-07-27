@@ -1,0 +1,23 @@
+Description: Fix SyntaxError on Python < 3.12 caused by a multi-line f-string
+ The expression inside the f-string braces spans two lines, which is only
+ valid starting with Python 3.12 (PEP 701: f-strings without the previous
+ multi-line/backslash restrictions). On Python 3.11 and earlier this raises
+ "SyntaxError: unterminated string literal" in CollectionItineraryDay.__str__,
+ which prevents the Django app from starting at all (import of models.py
+ fails immediately).
+Upstream-bug: https://github.com/seanmorley15/AdventureLog/issues
+Forwarded: not-yet
+Last-Update: 2026-06-25
+
+--- a/backend/server/adventures/models.py
++++ b/backend/server/adventures/models.py
+@@ -703,8 +703,7 @@
+         verbose_name_plural = "Collection Itinerary Days"
+     
+     def __str__(self):
+-        return f"{
+-            self.collection.name} - {self.date} - {self.name or 'Unnamed Day'}"
++        return f"{self.collection.name} - {self.date} - {self.name or 'Unnamed Day'}"
+ 
+ 
+ class CollectionItineraryItem(models.Model):
