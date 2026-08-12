@@ -51,7 +51,7 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/seanmorley15/AdventureLog/archive/refs/tags/v0.13.0.tar.gz"
+    url = "https://codeload.github.com/seanmorley15/AdventureLog/tar.gz/refs/tags/v0.13.0"
     sha256 = "d8a2af387e033dc2cc1a683e5f424c722cf71fa7a6e19e35fe3194c6fbc39eca"
 
     autoupdate.strategy = "latest_github_release"
