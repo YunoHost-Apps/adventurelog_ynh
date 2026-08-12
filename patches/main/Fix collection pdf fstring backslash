@@ -1,0 +1,25 @@
+Description: Fix SyntaxError on Python < 3.12 caused by a backslash inside
+ an f-string expression part
+ The expression part of the outer f-string contains a nested f-string
+ with escaped double quotes (\"...\"), i.e. a backslash inside the {...}
+ expression. This is only valid starting with Python 3.12 (PEP 701:
+ f-strings without the previous backslash restriction). On Python 3.11
+ and earlier this raises "SyntaxError: f-string expression part cannot
+ include a backslash" in _location_paragraphs, which prevents the
+ Django app from starting at all (import of collection_pdf.py fails
+ immediately).
+Upstream-bug: https://github.com/seanmorley15/AdventureLog/issues
+Forwarded: not-yet
+Last-Update: 2026-08-12
+--- a/backend/server/adventures/services/collection_pdf.py
++++ b/backend/server/adventures/services/collection_pdf.py
+@@ -259,7 +259,8 @@
+         icon = location.category.icon or ''
+         label = location.category.display_name or location.category.name
+         category = pdf_markup(f'{icon} {label}'.strip())
+-    flowables.append(Paragraph(f'<b>{title}</b>{f" <font color=\"#64748b\">{category}</font>" if category else ""}', styles['ItemTitle']))
++    category_html = f' <font color="#64748b">{category}</font>' if category else ""
++    flowables.append(Paragraph(f'<b>{title}</b>{category_html}', styles['ItemTitle']))
+ 
+     if location.location:
+         flowables.append(Paragraph(pdf_markup(location.location), styles['ItemMeta']))
