@@ -5,6 +5,7 @@ packaging_format = 2
 id = "adventurelog"
 name = "AdventureLog"
 description.en = "Travel companion for the modern-day explorer."
+description.fr = "Le compagnon de voyage des explorateurs d'aujourd'hui."
 
 version = "0.13.0~ynh1"
 
