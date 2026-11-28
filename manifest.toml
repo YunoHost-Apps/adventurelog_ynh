@@ -7,7 +7,7 @@ name = "AdventureLog"
 description.en = "Travel companion for the modern-day explorer."
 description.fr = "Le compagnon de voyage des explorateurs d'aujourd'hui."
 
-version = "0.13.1~ynh1"
+version = "0.14.0~ynh1"
 
 maintainers = ["Thovi98"]
 
@@ -52,8 +52,8 @@ ram.runtime = "400M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/seanmorley15/AdventureLog/archive/refs/tags/v0.13.1.tar.gz"
-    sha256 = "c1d838d62d52e7e26fe922d3a23b1692a6383e4a2c59fe07a94fb55c1ac7ab1a"
+    url = "https://github.com/seanmorley15/AdventureLog/archive/refs/tags/v0.14.0.tar.gz"
+    sha256 = "6f862db8fd8f54e2af140f70e034f8866d77d912d8df67bc2a8628b0258ddb36"
 
     autoupdate.strategy = "latest_github_release"
 
